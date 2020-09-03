@@ -107,7 +107,7 @@
       return ossClient.multipartUpload(fileName, file, {
         parallel,
         partSize,
-        progress: onMultipartUploadProgress
+        progress: onMultipartUploadProgress // 分片上传进度回调
       }).then(result => {
         const url = `http://${bucket}.${region}.aliyuncs.com/${fileName}`
         console.log(`Multipart upload ${file.name} succeed, url = `, url)
