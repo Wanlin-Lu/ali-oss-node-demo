@@ -136,6 +136,23 @@
         })
       })
     }
+
+    // 分片上传进度改变回调
+    async function onMultipartUploadProgress(progress, checkpoint) {
+      console.log(`${checkpoint.file.name} 上传进度 ${progress}`)
+      checkpoints[checkpoint.uploadId] = checkpoint
+      // 判断STS Token是否将要过期，过期就重新获取
+      const { Expiration } = credentials
+      const timegap = 14
+      if (Expiration && moment(Expiration).subtract(timegap, 'minute').isBefore(moment())) {
+        console.log(`STS token will expire in ${timegap} minutes, uploading will pause and resume after getting new STS token.`)
+        if (ossClient) {
+          ossClient.cancel()
+        }
+        await getCredential()
+        await resumeMultipartUpload()
+      }
+    }
   </script>
 </body>
 </html>
