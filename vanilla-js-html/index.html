@@ -32,5 +32,19 @@
     <button id="resumeBtn" onclick="resume()">resume</button>
     <h2 id="status"></h2>
   </div>
+
+  <script>
+    let credentials = null // STS凭证
+    let ossClient = null
+    const fileInput = document.getElementById('fileInput')
+    const status = document.getElementById('status')
+    const bucket = 'mern-share-place'
+    const region = 'oss-cn-hangzhou'
+    const partSize = 1024 * 1024 // 每个分片的大小
+    const parallel = 3 // 同时上传的分片数
+    const checkpoints = {} // 所有分片上传文件的检查点
+
+    
+  </script>
 </body>
 </html>
