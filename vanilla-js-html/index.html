@@ -115,6 +115,27 @@
         console.log(`Multipart upload ${file.name} failed = `, err)
       })
     }
+
+    // 断点续传
+    async function resumeMultipartUpload() {
+      Object.values(checkpoints).forEach(checkpoint => {
+        const { uploadId, file, name } = checkpoint
+        ossClient.multipartUpload(uploadId, file, {
+          parallel,
+          partSize,
+          progress: onMultipartUploadProgress,
+          checkpoint
+        }).then(result => {
+          console.log('before delete checkpoints = ', checkpoints)
+          delete checkpoints[checkpoint.uploadId]
+          console.log('after delete checkpoints = ', checkpoints)
+          const url = `http://${bucket}.${region}.aliyuncs.com/${name}`
+          console.log(`Resume multipart upload ${file.name} succeed, url = `, url)
+        }).catch(err => {
+          console.log('Resume multipart upload failed, ', err)
+        })
+      })
+    }
   </script>
 </body>
 </html>
