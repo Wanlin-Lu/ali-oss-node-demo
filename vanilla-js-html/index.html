@@ -44,6 +44,17 @@
     const parallel = 3 // 同时上传的分片数
     const checkpoints = {} // 所有分片上传文件的检查点
 
+    // 获取STS Token
+    function getCredential() {
+      return fetch('http://localhost:5000/api/upload/credential').then(res => {
+        return res.json()
+      }).then(res => {
+        console.log('credentials = ', res)
+        credentials = res.result
+      }).catch(err => {
+        console.error(err)
+      })
+    }
     
   </script>
 </body>
