@@ -153,6 +153,16 @@
         await resumeMultipartUpload()
       }
     }
+
+    function stop() {
+      status.innerText = 'Stopping'
+      if (ossClient) ossClient.cancel()
+    }
+
+    function resume() {
+      status.innerText = 'Resuming'
+      if (ossClient) resumeMultipartUpload()
+    }
   </script>
 </body>
 </html>
