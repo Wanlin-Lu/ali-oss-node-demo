@@ -55,7 +55,18 @@
         console.error(err)
       })
     }
-    
+
+    // 创建OSS client
+    async function initOSSClient() {
+      const { AccessKeyId, AccessKeySecret, SecurityToken } = credentials
+      ossClient = new OSS({
+        accessKeyId: AccessKeyId,
+        accessKeySecret: AccessKeySecret,
+        stsToken: SecurityToken,
+        bucket,
+        region
+      })
+    }
   </script>
 </body>
 </html>
