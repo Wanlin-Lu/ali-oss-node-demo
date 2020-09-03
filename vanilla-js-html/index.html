@@ -68,6 +68,23 @@
       })
     }
 
+    // 点击上传
+    async function upload() {
+      status.innerText = 'Uploading...'
+      // 获取STS Token
+      await getCredential()
+      const { files } = fileInput
+      const fileList = Array.from(files)
+      const uploadTasks = fileList.forEach(file => {
+        // 如果文件大小不需要分片，就使用普通上传
+        if (file.size < partSize) { 
+          commonUpload(file) 
+        } else { 
+          multipartUpload(file) 
+        } 
+      }) 
+    }
+
     // 普通上传
     async function commonUpload(file) {
       if (!ossClient) {
