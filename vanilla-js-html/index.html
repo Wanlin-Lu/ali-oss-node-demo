@@ -80,6 +80,24 @@
         console.log(`Common upload ${file.name} failed = `, err)
       })
     }
+
+    // 分片上传
+    async function multipartUpload(file) {
+      if (!ossClient) {
+        await initOSSClient()
+      }
+      const fileName = `${uuidv4()}-${file.name}`
+      return ossClient.multipartUpload(fileName, file, {
+        parallel,
+        partSize,
+        progress: onMultipartUploadProgress
+      }).then(result => {
+        const url = `http://${bucket}.${region}.aliyuncs.com/${fileName}`
+        console.log(`Multipart upload ${file.name} succeed, url = `, url)
+      }).catch(err => {
+        console.log(`Multipart upload ${file.name} failed = `, err)
+      })
+    }
   </script>
 </body>
 </html>
