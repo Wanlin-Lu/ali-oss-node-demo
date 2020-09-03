@@ -4,11 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ali-OSS-Demo</title>
+  <style>
+    div {
+      margin: 100px auto 0;
+      text-align: center;
+    }
 
+    button {
+      margin: 0 10px;
+    }
+
+    #status {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
   <script src="https://unpkg.com/moment-mini@latest/moment.min.js"></script>
   <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-6.10.0.min.js"></script>
+
+  <div>
+    <input type="file" id="fileInput" multiple="true">
+    <button id="uploadBtn" onclick="upload()">Upload</button>
+    <button id="stopBtn" onclick="stop()">Stop</button>
+    <button id="resumeBtn" onclick="resume()">resume</button>
+    <h2 id="status"></h2>
+  </div>
 </body>
 </html>
