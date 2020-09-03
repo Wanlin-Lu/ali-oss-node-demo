@@ -67,6 +67,19 @@
         region
       })
     }
+
+    // 普通上传
+    async function commonUpload(file) {
+      if (!ossClient) {
+        await initOSSClient()
+      }
+      const fileName = `${uuidv4()}-${file.name}`
+      return ossClient.put(fileName, file).then(result => {
+        console.log(`Common upload ${file.name} succeeded, result = `, result)
+      }).catch(err => {
+        console.log(`Common upload ${file.name} failed = `, err)
+      })
+    }
   </script>
 </body>
 </html>
