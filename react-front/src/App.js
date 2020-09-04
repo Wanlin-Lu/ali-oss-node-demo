@@ -1,13 +1,12 @@
 import React from 'react';
 import './App.less';
 
-import { Button } from 'antd'
+import Header from './components/Header'
 
 function App() {
   return (
     <div className="App">
-      <h1>React img Slider</h1>
-      <Button type="primary">upload</Button>
+      <Header />
     </div>
   );
 }
