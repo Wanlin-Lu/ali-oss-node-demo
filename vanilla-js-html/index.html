@@ -32,6 +32,9 @@
     <button id="resumeBtn" onclick="resume()">resume</button>
     <h2 id="status"></h2>
   </div>
+  <div>
+    <img id="img" src="" alt="img" />
+  </div>
 
   <script>
     let credentials = null // STS凭证
@@ -93,6 +96,14 @@
       const fileName = `${uuidv4()}-${file.name}`
       return ossClient.put(fileName, file).then(result => {
         console.log(`Common upload ${file.name} succeeded, result = `, result)
+
+        allowUrl(result.name).then(res => {
+          console.log('promise resolved:',res)
+          setImgSrc(res)
+        }).catch(err => {
+          console.log("signatureUrl faild",imgName)
+        })
+
       }).catch(err => {
         console.log(`Common upload ${file.name} failed = `, err)
       })
@@ -162,6 +173,20 @@
     function resume() {
       status.innerText = 'Resuming'
       if (ossClient) resumeMultipartUpload()
+    }
+
+    const img = document.getElementById('img')
+
+    function setImgSrc(src) {
+      img.setAttribute("src",src)
+    }
+
+    // signature url
+    async function allowUrl (imgName) {
+      if (!ossClient) {
+        await initOSSClient()
+      }
+      return await ossClient.signatureUrl(imgName)
     }
   </script>
 </body>
