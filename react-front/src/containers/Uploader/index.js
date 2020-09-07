@@ -5,7 +5,7 @@ import './style.less'
 
 const Uploader = () => {
   let [files, setFiles] = useState(null);
-  const { upload } = useAlioss()
+  const { upload, uploaded } = useAlioss()
   const filePickRef = useRef()
 
   const handleChange = e => {
@@ -17,6 +17,9 @@ const Uploader = () => {
 
   const handleUpload = async () => {
     await upload(files)
+    if (uploaded) {
+      console.log(uploaded);
+    }
   };
   return (
     <div className="uploader">
