@@ -18,7 +18,7 @@ const Uploader = () => {
   const handleUpload = async () => {
     await upload(files)
     if (uploaded) {
-      console.log(uploaded);
+      console.log(uploaded);//! get uploaded name array
     }
   };
   return (
