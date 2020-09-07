@@ -2,17 +2,12 @@ require('dotenv').config()
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const MongoClient = require('mongodb').MongoClient
 
-const OSS = require('ali-oss')
-const STS = OSS.STS
+const imageRouter = require('./routers/image-route')
+const imagesDAO = require('./dao/imageDao')
 
 const app = express()
-const sts = new STS({
-  accessKeyId: process.env.ALI_OSS_APP_ACCESS_KEY_ID,
-  accessKeySecret: process.env.ALI_OSS_APP_ACCESS_KEY_SECRET
-})
-
-
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
@@ -22,19 +17,25 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/api/upload/credential', async (req, res, next) => {
-  try {
-    const { credentials } = await sts.assumeRole(
-      "acs:ram::1786389648930150:role/uploader", //role arn
-      null, // policy
-      15 * 60, // expiration
-      'web-client' // session name
-    )
-    console.log(credentials)
-    res.status(200).json({ result: credentials })
-  } catch (err) {
-    res.status(401).json({e:err})
-  }
+app.use('/api/upload', imageRouter)
+app.use((req, res, next) => {
+  throw new Error('Could not find this route.')
 })
 
-app.listen(5000)
+MongoClient.connect(
+  process.env.DB_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    poolSize: 50,
+    wtimeout: 2500,
+  }
+).catch(err => {
+  console.log(err.stack)
+  process.exit(1)
+}).then(async client => {
+  await imagesDAO.injectDB(client)
+  app.listen(5000, () => {
+    console.log(`listening on port 5000`)
+  })
+})
