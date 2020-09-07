@@ -10,6 +10,7 @@
     "ali-oss": "^6.10.0",
     "antd": "^4.6.2",
     "craco-less": "^1.17.0",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
