@@ -25,9 +25,8 @@ const getCredentials = async (req, res, next) => {
 
 const getImages = async (req, res, next) => {
   try {
-    const imageResponse = imageDAO.getImages()
-
-    res.status(200).json({images: imageResponse})
+    let imageResponse = await imageDAO.getImages()
+    res.status(200).json({ imgs: imageResponse })
   } catch (e) {
     res.status(500).json({message:'Fail to get images.',e})
   }
@@ -35,7 +34,7 @@ const getImages = async (req, res, next) => {
 
 const postImages = async (req, res, next) => {
   try {
-    const images = req.body.images
+    const { images } = req.body
 
     const imageResponse = imageDAO.postImages(images)
 

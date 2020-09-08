@@ -11,16 +11,16 @@ const injectDB = async (mdc) => {
 
 const getImages = async () => {
   try {
-    return await images.find().toArray();
+    return await images.find().toArray()
   } catch (e) {
     console.error("Unable to get images");
     return { error: e}
   }
 }
 
-const postImages = async (images) => {
+const postImages = async (imgs) => {
   try {
-    await images.insertMany(images)
+    await images.insertMany(imgs)
     return {success: true}
   } catch (e) {
     console.error('Unable to post images')
