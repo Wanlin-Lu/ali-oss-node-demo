@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import moment from 'moment'
 import OSS from 'ali-oss'
-import { v4 as uuidv4 } from 'uuid'
 
 export const useAlioss = () => {
   let [ossClient, setOssClient] = useState();
   let [checkpoints, setCheckpoints] = useState({});
-  let uploaded = []
   let credentials;
 
   const bucket = "mern-share-place";
@@ -57,15 +55,14 @@ export const useAlioss = () => {
     if (!ossClient) {
       await initOSSClient();
     }
-    const fileName = `${uuidv4()}-${file.name}`;
+
     return ossClient
-      .put(fileName, file)
+      .put(file.uname, file)
       .then((result) => {
         console.log(
           `Common upload ${file.name} succeeded, result = `,
           result
         );
-        uploaded.push(result.name)
       })
       .catch((err) => {
         console.log(`Common upload ${file.name} failed = `, err);
@@ -76,17 +73,16 @@ export const useAlioss = () => {
     if (!ossClient) {
       await initOSSClient();
     }
-    const fileName = `${uuidv4()}-${file.name}`;
+
     return ossClient
-      .multipartUpload(fileName, file, {
+      .multipartUpload(file.uname, file, {
         parallel,
         partSize,
         progress: onMultipartUploadProgress, // 分片上传进度回调
       })
       .then((result) => {
-        const url = `http://${bucket}.${region}.aliyuncs.com/${fileName}`;
+        const url = `http://${bucket}.${region}.aliyuncs.com/${file.name}`;
         console.log(`Multipart upload ${file.name} succeed, url = `, url);
-        uploaded.push(result.name);
       })
       .catch((err) => {
         console.log(`Multipart upload ${file.name} failed = `, err);
@@ -141,5 +137,14 @@ export const useAlioss = () => {
         });
     });
   };
-  return { upload, uploaded }
+  async function allowUrl(imgName) {
+    if (!credentials) {
+      await getCredential()
+    }
+    if (!ossClient) {
+      await initOSSClient();
+    }
+    return await ossClient.signatureUrl(imgName);
+  }
+  return { upload, allowUrl }
 }
