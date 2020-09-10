@@ -50,6 +50,11 @@ const Pictures = () => {
     }
   }
   
+  /**
+   * ! this way is wrong, forEach(i => async()) can't get wished
+   * ! results
+   * @param {*} raw 
+   */
   async function signatureUrl(raw) {
     setSignatured(false)
     try {
@@ -76,6 +81,11 @@ const Pictures = () => {
     }
   }
 
+  /**
+   * ! This is the right way to forEach a async function
+   * @param {array} raw 
+   * @param {setImages} callback 
+   */
   function signatureUrl1(raw, callback) {
     let tempImgs = []
     let expecting = raw.imgs.length
