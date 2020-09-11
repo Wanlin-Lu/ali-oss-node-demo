@@ -1,14 +1,11 @@
 import React from 'react'
+import {Carousel, Image } from 'antd'
 
-const PictureList = props => {
-  console.log(props)
+const PictureList = ({imgs}) => {
   return (
-    <ul>
-      {/* imgs.length !== 0 ? imgs.map(i => <img key={i._id} src={i.src} alt="pic" />) : <h1>loading...</h1> */}
-      {props.imgs.pl && props.imgs.pl.map((i) => (
-        <img key={i._id} src={i.src} alt="pic" />
-      ))}
-    </ul>
+    <Carousel autoplay={true}>
+      {imgs && imgs.map((i) => <Image key={i._id} src={i.src} />)}
+    </Carousel>
   );
 }
 

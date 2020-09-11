@@ -34,13 +34,19 @@ const Uploader = () => {
     console.log(images)
     console.log(JSON.stringify(images))
     try {
-      const dbResponse = await fetch(
+      // const dbResponse = await fetch(
+      //   `${process.env.REACT_APP_BACKEND_URL}/upload/images`,
+      //   {
+      //     method: "POST",
+      //     body: JSON.stringify(images),
+      //     headers:{"Content-Type": "application/json",}
+      //   }
+      // );
+      const dbResponse = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/upload/images`,
-        {
-          method: "POST",
-          body: JSON.stringify(images),
-          headers:{"Content-Type": "application/json",}
-        }
+        "POST",
+        JSON.stringify(images),
+        { "Content-Type": "application/json" }
       );
       console.log(dbResponse);
     } catch (e) {
