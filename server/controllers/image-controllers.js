@@ -16,7 +16,6 @@ const getCredentials = async (req, res, next) => {
       15 * 60, // expiration
       "web-client" // session name
     );
-    console.log(credentials);
     res.status(200).json({ result: credentials });
   } catch (err) {
     res.status(401).json({ e: err });
