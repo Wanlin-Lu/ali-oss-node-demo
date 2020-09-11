@@ -13,6 +13,7 @@ const Pictures = () => {
   const [results, setResults] = useState()
   const [images, setImages] = useState({'pl':[]})
   const { allowUrl } = useAlioss()
+  const { sendRequest } = useHttpClient();
   // ! useRef.current to sequency the operations
   const resultsDoSetRef = useRef(false)
   const picListRef = useRef()
@@ -23,11 +24,15 @@ const Pictures = () => {
   
   async function getImages() {
     try {
-      const dbResponse = await fetch(
+      /* const dbResponse = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/upload/images`
+      ); */
+      // const resu = await dbResponse.json();
+
+      const resu = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/upload/images`
       );
 
-      const resu = await dbResponse.json();
 
       setResults(resu);
       resultsDoSetRef.current = true
@@ -106,13 +111,28 @@ const Pictures = () => {
     })
   }
 
+  /**
+   * try promise.all().then()
+   * 
+   */
+
+  function signatureUrl2(raw) {
+    const tasks = raw.imgs.map(i => allowUrl(i.img))
+    Promise.all(tasks).then(values => {
+      let resultImgs = raw.imgs.map((t, index) => ({ ...t, src: values[index] }));
+
+      setImages({ pl: resultImgs })
+    })
+  }
+
   useEffect(() => {
     if (resultsDoSetRef.current) {
       resultsDoSetRef.current = false
       // signatureUrl(results);
-      signatureUrl1(results, setImages)
+      // signatureUrl1(results, setImages)
+      signatureUrl2(results)
     }
-  }, [results])
+  }, [results, signatureUrl2])
   
   // useEffect(() => {
   //   const setPicList = i => {
