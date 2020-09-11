@@ -10,7 +10,7 @@ const Pictures = () => {
   const [loading, setLoading] = useState(true)
   const [signatured, setSignatured] = useState(false)
   const [results, setResults] = useState()
-  const [images, setImages] = useState({'pl':[]})
+  const [images, setImages] = useState([])
   const { allowUrl } = useAlioss()
   const { sendRequest } = useHttpClient();
   // ! useRef.current to sequency the operations
@@ -47,7 +47,7 @@ const Pictures = () => {
     Promise.all(tasks).then(values => {
       let resultImgs = raw.imgs.map((t, index) => ({ ...t, src: values[index] }));
 
-      setImages({ pl: resultImgs })
+      setImages(resultImgs)
       setSignatured(true)
     })
   }
